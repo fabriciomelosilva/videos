@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 const port = 3000;
 
@@ -45,6 +47,17 @@ const videos = [
 // Rota para listar vídeos
 app.get('/videos', (req, res) => {
   res.json(videos);
+});
+
+// Rota para listar blog posts
+app.get('/blog-posts', (req, res) => {
+  const filePath = path.join(__dirname, 'blogPosts.json');
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to load blog posts' });
+    }
+    res.json(JSON.parse(data));
+  });
 });
 
 app.listen(port, () => {
